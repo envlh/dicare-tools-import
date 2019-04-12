@@ -14,8 +14,8 @@ import org.wikidata.wdtk.dumpfiles.MwDumpFile;
 import org.wikidata.wdtk.dumpfiles.MwLocalDumpFile;
 
 public class Main {
-	
-	private static final Logger LOGGER = Logger.getLogger(Main.class);
+    
+    private static final Logger LOGGER = Logger.getLogger(Main.class);
     
     private static final String DUMP_DIRECTORY = "/home/wikidata/";
     private static final String TMP_DIRECTORY = "/tmp/";
@@ -57,7 +57,7 @@ public class Main {
             
             try (FileWriter dumpFW = new FileWriter(TMP_DIRECTORY + "dump.csv");
                     BufferedWriter dumpBW = new BufferedWriter(dumpFW);
-            		FileWriter propertyFW = new FileWriter(TMP_DIRECTORY + "property.csv");
+                    FileWriter propertyFW = new FileWriter(TMP_DIRECTORY + "property.csv");
                     BufferedWriter propertyBW = new BufferedWriter(propertyFW);
                     FileWriter propertiesFW = new FileWriter(TMP_DIRECTORY + "properties.csv");
                     BufferedWriter propertiesBW = new BufferedWriter(propertiesFW)) {
@@ -70,19 +70,19 @@ public class Main {
                 dumpProcessingController.registerEntityDocumentProcessor(propertiesProcessor, null, true);
                 
                 try {
-                	dumpProcessingController.processDump(dumpFile);
+                    dumpProcessingController.processDump(dumpFile);
                 } catch (RuntimeException e) {
-                	// used for test only
+                    // used for test only
                 }
                 
                 for (Long id : property.keySet()) {
-                	propertyFW.write(id + "," + property.get(id) + "\n");
+                    propertyFW.write(id + "," + property.get(id) + "\n");
                 }
                 
                 for (Long idA : properties.keySet()) {
-                	for (Long idB : properties.get(idA).keySet()) {
-                		propertiesFW.write(idA + "," + idB + "," + properties.get(idA).get(idB) + "\n");
-                	}
+                    for (Long idB : properties.get(idA).keySet()) {
+                        propertiesFW.write(idA + "," + idB + "," + properties.get(idA).get(idB) + "\n");
+                    }
                 }
                 
             } catch (Exception e) {

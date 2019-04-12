@@ -27,19 +27,19 @@ public class PropertiesProcessor implements EntityDocumentProcessor {
     
     @Override
     public void processItemDocument(ItemDocument itemDocument) {
-    	processStatementDocument(itemDocument);
+        processStatementDocument(itemDocument);
     }
     
     @Override
     public void processPropertyDocument(PropertyDocument propertyDocument) {
-    	processStatementDocument(propertyDocument);
+        processStatementDocument(propertyDocument);
     }
     
     @Override
     public void processLexemeDocument(LexemeDocument lexemeDocument) {
-    	processStatementDocument(lexemeDocument);
-	}
-	
+        processStatementDocument(lexemeDocument);
+    }
+    
     private void processStatementDocument(StatementDocument statementDocument) {
         TreeSet<Long> usedProperties = new TreeSet<>();
         for (Iterator<Statement> statements = statementDocument.getAllStatements(); statements.hasNext();) {
@@ -48,39 +48,39 @@ public class PropertiesProcessor implements EntityDocumentProcessor {
             if (!rank.equals(StatementRank.DEPRECATED)) {
                 Value value = statement.getValue();
                 if (value != null) {
-                	usedProperties.add(Long.parseLong(statement.getClaim().getMainSnak().getPropertyId().getId().substring(1)));
+                    usedProperties.add(Long.parseLong(statement.getClaim().getMainSnak().getPropertyId().getId().substring(1)));
                 }
             }
         }
         for (Long idA : usedProperties) {
-        	incProperty(idA);
-        	for (Long idB : usedProperties) {
-        		if (idA < idB) {
-        			incProperties(idA, idB);
-        		}
-        	}
+            incProperty(idA);
+            for (Long idB : usedProperties) {
+                if (idA < idB) {
+                    incProperties(idA, idB);
+                }
+            }
         }
         /*count++;
         if (count >= 10000) {
-        	throw new RuntimeException();
+            throw new RuntimeException();
         }*/
     }
     
     private void incProperty(Long id) {
-    	if (!property.containsKey(id)) {
-    		property.put(id, 0L);
-    	}
-    	property.put(id, property.get(id) + 1L);
+        if (!property.containsKey(id)) {
+            property.put(id, 0L);
+        }
+        property.put(id, property.get(id) + 1L);
     }
     
     private void incProperties(Long idA, Long idB) {
-    	if (!properties.containsKey(idA)) {
-    		properties.put(idA, new HashMap<>());
-    	}
-    	if (!properties.get(idA).containsKey(idB)) {
-    		properties.get(idA).put(idB, 0L);
-    	}
-    	properties.get(idA).put(idB, properties.get(idA).get(idB) + 1L);
+        if (!properties.containsKey(idA)) {
+            properties.put(idA, new HashMap<>());
+        }
+        if (!properties.get(idA).containsKey(idB)) {
+            properties.get(idA).put(idB, 0L);
+        }
+        properties.get(idA).put(idB, properties.get(idA).get(idB) + 1L);
     }
     
 }
