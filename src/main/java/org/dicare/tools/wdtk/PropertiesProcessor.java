@@ -15,8 +15,8 @@ import org.wikidata.wdtk.datamodel.interfaces.Value;
 
 public class PropertiesProcessor implements EntityDocumentProcessor {
     
-    private HashMap<Long, Long> property = new HashMap<>();
-    private HashMap<Long, HashMap<Long, Long>> properties = new HashMap<>();
+    private HashMap<Long, Long> property;
+    private HashMap<Long, HashMap<Long, Long>> properties;
     
     //private int count = 0;
     

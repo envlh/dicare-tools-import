@@ -55,19 +55,27 @@ public class Main {
             HashMap<Long, Long> property = new HashMap<>();
             HashMap<Long, HashMap<Long, Long>> properties = new HashMap<>();
             
+            HashMap<String, Long> project = new HashMap<>();
+            HashMap<String, HashMap<String, Long>> projects = new HashMap<>();
+            
             try (FileWriter dumpFW = new FileWriter(TMP_DIRECTORY + "dump.csv");
                     BufferedWriter dumpBW = new BufferedWriter(dumpFW);
                     FileWriter propertyFW = new FileWriter(TMP_DIRECTORY + "property.csv");
                     BufferedWriter propertyBW = new BufferedWriter(propertyFW);
                     FileWriter propertiesFW = new FileWriter(TMP_DIRECTORY + "properties.csv");
-                    BufferedWriter propertiesBW = new BufferedWriter(propertiesFW)) {
+                    BufferedWriter propertiesBW = new BufferedWriter(propertiesFW);
+            		FileWriter projectFW = new FileWriter(TMP_DIRECTORY + "project.csv");
+                    BufferedWriter projectBW = new BufferedWriter(projectFW);
+                    FileWriter projectsFW = new FileWriter(TMP_DIRECTORY + "projects.csv");
+                    BufferedWriter projectsBW = new BufferedWriter(projectsFW)) {
                 
                 String dumpDateStamp = dumpFile.getDateStamp();
                 dumpDateStamp = dumpDateStamp.substring(0, 4) + "-" + dumpDateStamp.substring(4, 6) + "-" + dumpDateStamp.substring(6, 8);
                 dumpFW.write(dumpDateStamp);
                 
-                PropertiesProcessor propertiesProcessor = new PropertiesProcessor(property, properties);
-                dumpProcessingController.registerEntityDocumentProcessor(propertiesProcessor, null, true);
+                dumpProcessingController.registerEntityDocumentProcessor(new PropertiesProcessor(property, properties), null, true);
+                
+                dumpProcessingController.registerEntityDocumentProcessor(new ProjectsProcessor(project, projects), null, true);
                 
                 try {
                     dumpProcessingController.processDump(dumpFile);
@@ -75,13 +83,23 @@ public class Main {
                     // used for test only
                 }
                 
+                // properties
                 for (Long id : property.keySet()) {
                     propertyFW.write(id + "," + property.get(id) + "\n");
                 }
-                
                 for (Long idA : properties.keySet()) {
                     for (Long idB : properties.get(idA).keySet()) {
                         propertiesFW.write(idA + "," + idB + "," + properties.get(idA).get(idB) + "\n");
+                    }
+                }
+                
+                // projects
+                for (String id : project.keySet()) {
+                    projectFW.write(id + "," + project.get(id) + "\n");
+                }
+                for (String idA : projects.keySet()) {
+                    for (String idB : projects.get(idA).keySet()) {
+                        projectsFW.write(idA + "," + idB + "," + projects.get(idA).get(idB) + "\n");
                     }
                 }
                 
