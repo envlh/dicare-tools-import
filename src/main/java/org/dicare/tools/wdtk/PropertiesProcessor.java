@@ -14,32 +14,32 @@ import org.wikidata.wdtk.datamodel.interfaces.StatementRank;
 import org.wikidata.wdtk.datamodel.interfaces.Value;
 
 public class PropertiesProcessor implements EntityDocumentProcessor {
-    
+
     private HashMap<Long, Long> property;
     private HashMap<Long, HashMap<Long, Long>> properties;
-    
-    //private int count = 0;
-    
+
+    // private int count = 0;
+
     public PropertiesProcessor(HashMap<Long, Long> property, HashMap<Long, HashMap<Long, Long>> properties) {
         this.property = property;
         this.properties = properties;
     }
-    
+
     @Override
     public void processItemDocument(ItemDocument itemDocument) {
         processStatementDocument(itemDocument);
     }
-    
+
     @Override
     public void processPropertyDocument(PropertyDocument propertyDocument) {
         processStatementDocument(propertyDocument);
     }
-    
+
     @Override
     public void processLexemeDocument(LexemeDocument lexemeDocument) {
         processStatementDocument(lexemeDocument);
     }
-    
+
     private void processStatementDocument(StatementDocument statementDocument) {
         TreeSet<Long> usedProperties = new TreeSet<>();
         for (Iterator<Statement> statements = statementDocument.getAllStatements(); statements.hasNext();) {
@@ -48,7 +48,8 @@ public class PropertiesProcessor implements EntityDocumentProcessor {
             if (!rank.equals(StatementRank.DEPRECATED)) {
                 Value value = statement.getValue();
                 if (value != null) {
-                    usedProperties.add(Long.parseLong(statement.getClaim().getMainSnak().getPropertyId().getId().substring(1)));
+                    usedProperties.add(
+                            Long.parseLong(statement.getClaim().getMainSnak().getPropertyId().getId().substring(1)));
                 }
             }
         }
@@ -60,19 +61,19 @@ public class PropertiesProcessor implements EntityDocumentProcessor {
                 }
             }
         }
-        /*count++;
-        if (count >= 10000) {
-            throw new RuntimeException();
-        }*/
+        // count++;
+        // if (count >= 10000) {
+        // throw new RuntimeException();
+        // }
     }
-    
+
     private void incProperty(Long id) {
         if (!property.containsKey(id)) {
             property.put(id, 0L);
         }
         property.put(id, property.get(id) + 1L);
     }
-    
+
     private void incProperties(Long idA, Long idB) {
         if (!properties.containsKey(idA)) {
             properties.put(idA, new HashMap<>());
@@ -82,5 +83,5 @@ public class PropertiesProcessor implements EntityDocumentProcessor {
         }
         properties.get(idA).put(idB, properties.get(idA).get(idB) + 1L);
     }
-    
+
 }
